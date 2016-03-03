@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">RepFinder</string>
+    <string name="action_settings">Settings</string>
+    <string name="find_reps">Find Reps!</string>
+    <string name="title_string">RepFinder 2016</string>
+    <string name="my_location">Use My Location</string>
+    <string name="enter_zip">Enter Zip Code</string>
+    <string name="title_activity_list_reps">listReps</string>
+    <string name="title_activity_detail_view">detail_view</string>
+    <string name="title_activity_send_test">send_test</string>
+</resources>
