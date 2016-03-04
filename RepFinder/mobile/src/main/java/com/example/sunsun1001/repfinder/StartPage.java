@@ -32,7 +32,7 @@ public class StartPage extends AppCompatActivity {
                         listReps.class);
                 zipText = (EditText) findViewById(R.id.zipNum);
                 zipCode = zipText.getText().toString();
-                myIntent.putExtra("zip", zipCode);
+                myIntent.putExtra("inputCode", zipCode);
                 startActivity(myIntent);
             }
 
@@ -47,7 +47,7 @@ public class StartPage extends AppCompatActivity {
                 Intent myIntent = new Intent(StartPage.this,
                         listReps.class);
 
-                myIntent.putExtra("zip", gen());
+                myIntent.putExtra("inputCode", gen());
                 startActivity(myIntent);
 
             }

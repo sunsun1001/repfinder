@@ -3,6 +3,7 @@ package com.example.sunsun1001.repfinder;
 /**
  * Created by sunsun1001 on 3/1/16.
  */
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,38 +62,33 @@ public class CustomAdapter extends BaseAdapter{
         return position;
     }
 
-    public class Holder
-    {
+    public class Holder {
         TextView textSenatorNames;
         ImageView img;
         Button moreDetails;
     }
+
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         // TODO Auto-generated method stub
         Holder holder = new Holder();
-        View myRowView;
-        myRowView = inflater.inflate(R.layout.program_list, null);
+        View myRowView = inflater.inflate(R.layout.row, null);
 
         // Formatting the Rows
 
-        holder.textSenatorNames=(TextView) myRowView.findViewById(R.id.textSenatorName);
+        holder.textSenatorNames=(TextView) myRowView.findViewById(R.id.name);
 
         String output = "\n\n\t\t\t" + senatorNames[position] +
-                "\n\n\n\t\t\t" +
-                siteUrl[position] + "\n\n\t\t\t" +
-                emailAdd[position] + "\n\n\t\t\t" + tweet[position] +
-                "\n\n\n\n\n";
+                "\n\n\n\t\t\t" + siteUrl[position] + "\n\n\t\t\t" +
+                emailAdd[position] + "\n\n\t\t\t" + tweet[position] + "\n\n\n\n\n";
         SpannableString text = new SpannableString(output);
-        text.setSpan(new ForegroundColorSpan(Color.parseColor("#2B98EC")), 0, 5 + senatorNames[position].length(), 0);
-        text.setSpan(new ForegroundColorSpan(Color.parseColor("#2B98EC")),
-                output.length() - tweet[position].length() - 5, output.length(), 0);
-//        holder.textSenatorNames.setText(text, TextView.BufferType.SPANNABLE);
+        holder.textSenatorNames.setText(output);
+
 
 
         holder.moreDetails = (Button) myRowView.findViewById(R.id.details);
         holder.img=(ImageView) myRowView.findViewById(R.id.imageView1);
-//        holder.textSenatorNames.setText(senatorNames[position]);
+        //holder.textSenatorNames.setText(senatorNames[position]);
         holder.img.setImageResource(imageId[position]);
 
         myRowView.setOnClickListener(new OnClickListener() {
@@ -101,6 +97,7 @@ public class CustomAdapter extends BaseAdapter{
                 // TODO Auto-generated method stub
                 newIntent.putExtra("name", senatorNames[position]);
                 newIntent.putExtra("picture", imageId[position]);
+
                 context.startActivity(newIntent);
                 Toast.makeText(context, "You Clicked " + senatorNames[position], Toast.LENGTH_SHORT).show();
             }
@@ -113,6 +110,7 @@ public class CustomAdapter extends BaseAdapter{
 
                 newIntent.putExtra("name", senatorNames[position]);
                 newIntent.putExtra("picture", imageId[position]);
+
                 context.startActivity(newIntent);
             }
         });
@@ -123,6 +121,7 @@ public class CustomAdapter extends BaseAdapter{
 
                 newIntent.putExtra("name", senatorNames[position]);
                 newIntent.putExtra("picture", imageId[position]);
+
                 context.startActivity(newIntent);
             }
         });

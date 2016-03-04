@@ -27,15 +27,15 @@ public class listReps extends AppCompatActivity {
     Context context;
 
     public static int[] picture = {R.drawable.boxer, R.drawable.boxer,
-            R.drawable.boxer, R.drawable.boxer};
+            R.drawable.boxer};
     public static String[] senatorNames = {"Barbara Boxer (D)", "Barbara Boxer (D)",
-            "Barbara Boxer (D)", "Barbara Boxer (D)"};
+            "Barbara Boxer (D)"};
     public static String [] url = {"http://boxer.senate.gov", "http://boxer.senate.gov",
-            "http://boxer.senate.gov", "http://boxer.senate.gov"};
+            "http://boxer.senate.gov"};
     public static String [] emailAdd = {"senator@boxer.senate.gov", "senator@boxer.senate.gov",
-            "senator@boxer.senate.gov", "senator@boxer.senate.gov"};
+            "senator@boxer.senate.gov"};
     public static String [] tweet = {"Democrats have 3 words...", "Democrats have 3 words...",
-            "Democrats have 3 words...", "Democrats have 3 words..."};
+            "Democrats have 3 words..."};
 
 
     @Override
@@ -55,11 +55,13 @@ public class listReps extends AppCompatActivity {
         tempAdapter.newIntent = newIntent;
 
 
-       // Intent i = getIntent();
-       // zipCode = i.getStringExtra("zip");
-       // Log.v("myTag", zipCode);
+//        Intent i = getIntent();
+//        zipCode = i.getStringExtra("zip");
 
-
+        // Send Zip to Watch
+        Intent sendIntent = new Intent(getBaseContext(), PhoneToWatchService.class);
+        sendIntent.putExtra("inputCode", getIntent().getStringExtra("inputCode"));
+        startService(sendIntent);
 
     }
 }
