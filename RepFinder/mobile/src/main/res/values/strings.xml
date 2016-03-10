@@ -8,4 +8,6 @@
     <string name="title_activity_list_reps">listReps</string>
     <string name="title_activity_detail_view">detail_view</string>
     <string name="title_activity_send_test">send_test</string>
+    <string name="title_activity_lat_long">LatLong</string>
+    <string name="google_app_id">327097753764</string>
 </resources>
