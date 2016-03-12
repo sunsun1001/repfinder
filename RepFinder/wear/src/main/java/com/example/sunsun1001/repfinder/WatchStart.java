@@ -8,18 +8,22 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
+import android.support.wearable.view.WearableListView;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import java.util.Random;
+
 import android.content.res.Resources;
 import android.support.wearable.view.DotsPageIndicator;
 import android.support.wearable.view.GridViewPager;
 import android.view.View.OnApplyWindowInsetsListener;
 import android.view.WindowInsets;
-
 
 
 public class WatchStart extends Activity {
@@ -29,6 +33,7 @@ public class WatchStart extends Activity {
     // private Button mSelect;
     private Button mElectionData;
     private Button mDetailedButton;
+    private WearableListView varList;
     private String[] names;
 
     @Override
@@ -36,11 +41,10 @@ public class WatchStart extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_watch_start);
 
-
         // Shake Code
-        /* do this in onCreate */
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(mSensorListener, mSensorManager
+                .getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
         mAccel = 0.00f;
         mAccelCurrent = SensorManager.GRAVITY_EARTH;
         mAccelLast = SensorManager.GRAVITY_EARTH;
@@ -53,11 +57,12 @@ public class WatchStart extends Activity {
         final String inputCode;
 
         if (extras != null) {
-            inputCode = intent.getStringExtra("inputCode");
+            inputCode = intent.getStringExtra("data");
         }
 
         /* API CALL */
         /* Use Zip Code to Query API for Names, 2012 Data */
+
 
         // Setting up the listview
         // Using temporary data
@@ -65,7 +70,8 @@ public class WatchStart extends Activity {
                 "Senator Dianne Feinstein (D)"};
 
         final Resources res = getResources();
-        final GridViewPager pager = (GridViewPager) findViewById(R.id.pager);
+        final GridViewPager pager = (GridViewPager) findViewById(R.id.arrival_pager);
+
         pager.setOnApplyWindowInsetsListener(new OnApplyWindowInsetsListener() {
             @Override
             public WindowInsets onApplyWindowInsets(View v, WindowInsets insets) {
@@ -74,54 +80,20 @@ public class WatchStart extends Activity {
                 int colMargin = res.getDimensionPixelOffset(round ?
                         R.dimen.page_column_margin_round : R.dimen.page_column_margin);
                 pager.setPageMargins(rowMargin, colMargin);
-                pager.onApplyWindowInsets(insets);
-
-                v.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // TODO Auto-generated method stub
-
-                        Log.v("T", "Detailed button clicked");
-                        Intent sendIntent = new Intent(getBaseContext(), WatchToPhoneService.class);
-                        sendIntent.putExtra("command", "detailed");
-                        sendIntent.putExtra("data", "Senator Dianne Feinstein (D)");
-                        startService(sendIntent);
-                        Log.v("T", "called start service");
-                    }
-                });
-
                 return insets;
             }
         });
-        pager.setAdapter(new SampleGridPagerAdapter(this, getFragmentManager()));
+        pager.setAdapter(new MyAdapter(this, getFragmentManager(),
+                intent.getStringExtra("data")));
+        pager.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.v("v", "clicked card");
+            }
+        });
         DotsPageIndicator dotsPageIndicator = (DotsPageIndicator) findViewById(R.id.page_indicator);
         dotsPageIndicator.setPager(pager);
 
-//        varList = (WearableListView) findViewById(R.id.list);
-//        varList.setAdapter(new Adapter(this, names));
-//
-//        // If a row is clicked
-//        varList.setClickListener(new WearableListView.ClickListener() {
-//            @Override
-//            public void onClick(WearableListView.ViewHolder viewHolder) {
-//                int position = viewHolder.getPosition();
-//
-//                Log.v("T", "Detailed button clicked");
-//                Intent sendIntent = new Intent(getBaseContext(), WatchToPhoneService.class);
-//                sendIntent.putExtra("command", "detailed");
-//                sendIntent.putExtra("data", "Senator Dianne Feinstein (D)");
-//                startService(sendIntent);
-//                Log.v("T", "called start service");
-//
-//
-//                Toast.makeText(rep.this, "Detailed View: " + names[position],
-//                        Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onTopEmptyRegionClick() {
-//            }
-//        });
 
         mElectionData.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,7 +102,7 @@ public class WatchStart extends Activity {
                 Log.v("T", "Clicked on election 2012 data button");
                 Intent election = new Intent(WatchStart.this,
                         electionData.class);
-                election.putExtra("inputCode", intent.getStringExtra("inputCode"));
+                election.putExtra("data", intent.getStringExtra("data"));
                 Log.v("T", "Created Intent");
                 startActivity(election);
             }
@@ -145,8 +117,25 @@ public class WatchStart extends Activity {
                 Intent sendIntent = new Intent(getBaseContext(), WatchToPhoneService.class);
                 sendIntent.putExtra("command", "detailed");
 
+                /* load string as following (county|name...|obama%|romney%): "county|name|33.6|55.3" */
+                /* name = "|display name, party, term date, bioID|" */
+                String delims = "[|]";
+                String delimsName = "[,]";
+
+                String[] dataSplit = intent.getStringExtra("data").split(delims);
+                String[] nameSplit = dataSplit[1].split(delimsName);
+
+                Log.v("v", "Incoming Data: " + intent.getStringExtra("data"));
+                Log.v("v", "Incoming Split Data: " + nameSplit[0]);
+
+                String toPhone = "";
+                toPhone += nameSplit[0] + "|";
+                toPhone += nameSplit[1] + "|";
+                toPhone += nameSplit[2] + "|";
+                toPhone += nameSplit[3];
+
                 /* API: Will send index of one picked */
-                sendIntent.putExtra("data", "Senator Dianne Feinstein (D)");
+                sendIntent.putExtra("data", toPhone);
                 startService(sendIntent);
                 Log.v("T", "called start service");
             }
@@ -155,9 +144,9 @@ public class WatchStart extends Activity {
     }
 
     SensorManager mSensorManager;
-    float mAccel; // acceleration apart from gravity
-    float mAccelCurrent; // current acceleration including gravity
-    float mAccelLast; // last acceleration including gravity
+    float mAccel;
+    float mAccelCurrent;
+    float mAccelLast;
 
     final SensorEventListener mSensorListener = new SensorEventListener() {
 
@@ -166,9 +155,9 @@ public class WatchStart extends Activity {
             float y = se.values[1];
             float z = se.values[2];
             mAccelLast = mAccelCurrent;
-            mAccelCurrent = (float) Math.sqrt((double) (x*x + y*y + z*z));
+            mAccelCurrent = (float) Math.sqrt((double) (x * x + y * y + z * z));
             float delta = mAccelCurrent - mAccelLast;
-            mAccel = mAccel * 0.9f + delta; // perform low-cut filter
+            mAccel = mAccel * 0.9f + delta;
 
             if (mAccel > 12) {
                 Toast toast = Toast.makeText(getApplicationContext(), "Device has shaken.", Toast.LENGTH_LONG);
@@ -180,7 +169,6 @@ public class WatchStart extends Activity {
 
                 /* API Generate random zip code */
 
-                //election.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 Random gen = new Random();
                 String newInput = "928" + Integer.toString(gen.nextInt(10))
                         + Integer.toString(gen.nextInt(10));

@@ -74,7 +74,7 @@ public class WatchToPhoneService extends Service implements GoogleApiClient.Conn
                         // final String command = bundle.getString("command");
                         //final String data = bundle.getString("data");
                         Log.v("T", "Sending /command and data: ");
-                        sendMessage("/" + command, "92867");
+                        sendMessage("/" + command, data);
                         Log.v("T", "Sent message detailed with: ");
                         _this.stopSelf();
                     }
@@ -87,7 +87,7 @@ public class WatchToPhoneService extends Service implements GoogleApiClient.Conn
         // which was passed over when we called startService
         Bundle extras = intent.getExtras();
         command = extras.getString("command");
-
+        data = extras.getString("data");
 
 //        // Send the message with the cat name
 //        new Thread(new Runnable() {

@@ -102,13 +102,14 @@
         android:layout_below="@+id/bills" />
 
     <Button
-        android:layout_width="89dp"
-        android:layout_height="28dp"
+        android:layout_width="75dp"
+        android:layout_height="25dp"
         android:text="Go Back"
         android:textSize="28px"
         android:textColor="#000000"
+        android:background="#219653"
         android:id="@+id/backButton"
         android:layout_alignParentBottom="true"
-        android:layout_alignEnd="@+id/nameView" />
+        android:layout_toEndOf="@+id/detailedImage" />
 
 </RelativeLayout>

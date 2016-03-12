@@ -19,31 +19,42 @@ import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.graphics.Color;
 
-public class CustomAdapter extends BaseAdapter{
+import com.squareup.picasso.Picasso;
 
-    String [] senatorNames;
-    String [] siteUrl;
-    String [] emailAdd;
-    String [] tweet;
+public class CustomAdapter extends BaseAdapter {
+
+    String[] senatorNames;
+    String[] siteUrl;
+    String[] emailAdd;
+    String[] tweet;
+    String[] bioID;
+    String[] party;
+    String[] termDate;
+
+
     Context context;
-    int [] imageId;
     public Intent newIntent;
-    private static LayoutInflater inflater=null;
+    private static LayoutInflater inflater = null;
 
-    public CustomAdapter(listReps mainActivity, int[] picture, String[] names,
-                         String[] url, String[] email, String[] tweet) {
+    public CustomAdapter(listReps mainActivity, String[] names,
+                         String[] url, String[] email, String[] tweet, String[] bioID,
+                         String[] party, String[] termDate) {
         // TODO Auto-generated constructor stub
 
         this.senatorNames = names;
         this.siteUrl = url;
         this.emailAdd = email;
         this.tweet = tweet;
-        this.imageId = picture;
-        this.newIntent = null;
+        this.bioID = bioID;
+        this.party = party;
+        this.termDate = termDate;
+
+
         context = mainActivity;
-        inflater = ( LayoutInflater )context.
+        inflater = (LayoutInflater) context.
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
+
     @Override
     public int getCount() {
         // TODO Auto-generated method stub
@@ -65,7 +76,6 @@ public class CustomAdapter extends BaseAdapter{
     public class Holder {
         TextView textSenatorNames;
         ImageView img;
-        Button moreDetails;
     }
 
     @Override
@@ -76,41 +86,50 @@ public class CustomAdapter extends BaseAdapter{
 
         // Formatting the Rows
 
-        holder.textSenatorNames=(TextView) myRowView.findViewById(R.id.name);
-
+        // Text view formatting
+        holder.textSenatorNames = (TextView) myRowView.findViewById(R.id.name);
         String output = "\n\n\t\t\t" + senatorNames[position] +
-                "\n\n\n\t\t\t" + siteUrl[position] + "\n\n\t\t\t" +
-                emailAdd[position] + "\n\n\t\t\t" + tweet[position] + "\n\n\n\n\n";
+                "\n\n\n\t\t\t" +
+                siteUrl[position] + "\n\n\t\t\t" +
+                emailAdd[position] + "\n\n\t\t\t" + tweet[position] +
+                "\n";
         SpannableString text = new SpannableString(output);
-        holder.textSenatorNames.setText(output);
 
+        if (this.party[position].equalsIgnoreCase("D")) {
+            text.setSpan(new ForegroundColorSpan(Color.parseColor("#2F80ED")), 0,
+                    5 + senatorNames[position].length(), 0);
+            text.setSpan(new ForegroundColorSpan(Color.parseColor("#2F80ED")),
+                    output.length() - tweet[position].length() - 5, output.length(), 0);
+        } else if (this.party[position].equalsIgnoreCase("I")) {
+            text.setSpan(new ForegroundColorSpan(Color.parseColor("#219653")), 0,
+                    5 + senatorNames[position].length(), 0);
+            text.setSpan(new ForegroundColorSpan(Color.parseColor("#219653")),
+                    output.length() - tweet[position].length() - 5, output.length(), 0);
+        } else {
+            text.setSpan(new ForegroundColorSpan(Color.parseColor("#EB5757")), 0,
+                    5 + senatorNames[position].length(), 0);
+            text.setSpan(new ForegroundColorSpan(Color.parseColor("#EB5757")),
+                    output.length() - tweet[position].length() - 5, output.length(), 0);
+        }
+        holder.textSenatorNames.setText(text, TextView.BufferType.SPANNABLE);
 
+        // Image
 
-        holder.moreDetails = (Button) myRowView.findViewById(R.id.details);
-        holder.img=(ImageView) myRowView.findViewById(R.id.imageView1);
-        //holder.textSenatorNames.setText(senatorNames[position]);
-        holder.img.setImageResource(imageId[position]);
+        holder.img = (ImageView) myRowView.findViewById(R.id.imageView1);
+        String url = "https://theunitedstates.io/images/congress/original/" + bioID[position]
+                + ".jpg";
+        Picasso.with(context)
+                .load(url)
+                .into(holder.img);
 
-        myRowView.setOnClickListener(new OnClickListener() {
+        holder.img.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
-                newIntent.putExtra("name", senatorNames[position]);
-                newIntent.putExtra("picture", imageId[position]);
-
-                context.startActivity(newIntent);
-                Toast.makeText(context, "You Clicked " + senatorNames[position], Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        holder.moreDetails.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
 
                 newIntent.putExtra("name", senatorNames[position]);
-                newIntent.putExtra("picture", imageId[position]);
-
+                newIntent.putExtra("bioID", bioID[position]);
+                newIntent.putExtra("term", termDate[position]);
+                newIntent.putExtra("party", party[position]);
                 context.startActivity(newIntent);
             }
         });
@@ -120,11 +139,13 @@ public class CustomAdapter extends BaseAdapter{
             public void onClick(View v) {
 
                 newIntent.putExtra("name", senatorNames[position]);
-                newIntent.putExtra("picture", imageId[position]);
-
+                newIntent.putExtra("bioID", bioID[position]);
+                newIntent.putExtra("term", termDate[position]);
+                newIntent.putExtra("party", party[position]);
                 context.startActivity(newIntent);
             }
         });
+
 
         return myRowView;
     }

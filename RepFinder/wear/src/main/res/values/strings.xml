@@ -26,5 +26,6 @@
     <string name="custom_fragment_text">"GridViewPager will accept any fragment. This is an example of a custom fragment with it's own background."</string>
     <string name="title_activity_election_data">electionData</string>
     <string name="title_activity_start_page">startPage</string>
+    <string name="volley">%1$s</string>
 
 </resources>

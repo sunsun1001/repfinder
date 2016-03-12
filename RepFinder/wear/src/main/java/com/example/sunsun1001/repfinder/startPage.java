@@ -24,7 +24,8 @@ public class startPage extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_start_page);Intent intent = getIntent();
+        setContentView(R.layout.activity_start_page);
+        Intent intent = getIntent();
         Bundle extras = intent.getExtras();
 
         if (extras != null) {

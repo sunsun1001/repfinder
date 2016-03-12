@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <FrameLayout
+<RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -8,9 +8,21 @@
         tools:deviceIds="wear_round">
 
         <android.support.wearable.view.GridViewPager
-            android:id="@+id/pager"
+            android:id="@+id/arrival_pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
+    <android.support.wearable.view.WatchViewStub
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/watch_view_stub"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:roundLayout="@layout/round_activity_watch_start"
+        tools:context=".MyActivity"
+        tools:deviceIds="wear">
+    </android.support.wearable.view.WatchViewStub>
 
         <android.support.wearable.view.DotsPageIndicator
             android:id="@+id/page_indicator"
@@ -18,4 +30,4 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|bottom"
             android:layout_marginBottom="25dp" />
-    </FrameLayout>
+    </RelativeLayout>

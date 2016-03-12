@@ -26,8 +26,7 @@ public class WatchListenerService extends WearableListenerService {
         String value = new String(messageEvent.getData(), StandardCharsets.UTF_8);
         Intent intent = new Intent(this, WatchStart.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-        intent.putExtra("inputCode", value);
+        intent.putExtra("data", value);
         Log.v("T", "about to start watch MainActivity with zip: " + value);
         startActivity(intent);
     }

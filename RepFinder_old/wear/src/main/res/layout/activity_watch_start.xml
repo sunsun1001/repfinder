@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:gravity="center" android:layout_gravity="center"
+    tools:context=".rep" android:orientation="vertical" tools:deviceIds="wear_round"
+    android:background="#C5BCBC">
+
+    <FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.example.sunsun1001.repfinder.WatchStart"
+        tools:deviceIds="wear_round">
+
+        <android.support.wearable.view.GridViewPager
+            android:id="@+id/pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="26px"/>
+
+        <android.support.wearable.view.DotsPageIndicator
+            android:id="@+id/page_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginBottom="5dp" />
+    </FrameLayout>
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="20dp"
+        android:text="2012 Election"
+        android:textSize="18px"
+        android:id="@+id/electionData"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:textColor="#303030"
+        android:background="#219653" />
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="20dp"
+        android:text="Detail View"
+        android:textSize="18px"
+        android:id="@+id/detailedButton"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="100dp"
+        android:textColor="#303030"
+        android:background="#219653" />
+
+
+</LinearLayout>

@@ -30,7 +30,6 @@ public class electionData extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_election_data);
 
-        /* do this in onCreate */
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
         mAccel = 0.00f;
@@ -38,7 +37,12 @@ public class electionData extends Activity {
         mAccelLast = SensorManager.GRAVITY_EARTH;
 
         Intent thisIntent = getIntent();
-        final String zip = thisIntent.getStringExtra("inputCode");
+        final String data = thisIntent.getStringExtra("data");
+        String delims = "[|]";
+        String[] dataSplit = data.split(delims);
+        String romneyP = dataSplit[dataSplit.length - 1];
+        String obamaP = dataSplit[dataSplit.length - 2];
+        String countyP = dataSplit[0];
 
         /* Api Call to get 2012 data */
         dist = (TextView) findViewById(R.id.district);
@@ -46,16 +50,16 @@ public class electionData extends Activity {
         obama = (TextView) findViewById(R.id.obamaText);
         goBack = (Button) findViewById(R.id.back);
 
-        romney.setText("Romney\t\t\t\t39%");
-        obama.setText("Obama\t\t\t\t\t61%");
-        dist.setText("Zip Code: " + zip);
+        romney.setText("Romney\t\t\t\t" + romneyP + "%");
+        obama.setText("Obama\t\t\t\t\t" + obamaP + "%");
+        dist.setText("County: " + countyP);
 
         goBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent back = new Intent(electionData.this,
                         WatchStart.class);
-                back.putExtra("inputCode", zip);
+                back.putExtra("data", data);
                 startActivity(back);
             }
 
@@ -63,9 +67,9 @@ public class electionData extends Activity {
     }
 
     SensorManager mSensorManager;
-    float mAccel; // acceleration apart from gravity
-    float mAccelCurrent; // current acceleration including gravity
-    float mAccelLast; // last acceleration including gravity
+    float mAccel;
+    float mAccelCurrent;
+    float mAccelLast;
 
     final SensorEventListener mSensorListener = new SensorEventListener() {
 
@@ -74,7 +78,7 @@ public class electionData extends Activity {
             float y = se.values[1];
             float z = se.values[2];
             mAccelLast = mAccelCurrent;
-            mAccelCurrent = (float) Math.sqrt((double) (x*x + y*y + z*z));
+            mAccelCurrent = (float) Math.sqrt((double) (x * x + y * y + z * z));
             float delta = mAccelCurrent - mAccelLast;
             mAccel = mAccel * 0.9f + delta; // perform low-cut filter
 
@@ -88,7 +92,6 @@ public class electionData extends Activity {
 
                 /* API Generate random zip code */
 
-                //election.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 Random gen = new Random();
                 String newInput = "928" + Integer.toString(gen.nextInt(10))
                         + Integer.toString(gen.nextInt(10));
